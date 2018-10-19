@@ -1,5 +1,7 @@
 package com.lothrazar.hostileores;
 
+import java.util.List;
+import org.apache.logging.log4j.Logger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.init.Blocks;
@@ -12,14 +14,8 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.io.File;
-import java.util.List;
-
-import org.apache.logging.log4j.Logger;
 
 @Mod(modid = ModHostileMiners.MODID)
 public class ModHostileMiners {
@@ -29,6 +25,12 @@ public class ModHostileMiners {
 	private static Logger logger;
 
 	private String[] blockIdsToTrigger;
+  private String[] potionEffectWhenAngered;
+  private int percent;
+  private int rangeHorizontal = 3;
+  private int rangeVertical = 16;
+  private int maxNumberPerSearchedOre = 1;
+  private int maxNumberPerTriggeredOre = 1;
  
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
@@ -49,8 +51,12 @@ public class ModHostileMiners {
 				
 				
 		};
-		this.blockIdsToTrigger = config.getStringList("blocks mined", MODID, defaults, "cccc");
-	 
+    this.blockIdsToTrigger = config.getStringList("blocks mined", MODID, defaults, "List of blocks that will cause anger when mined.  ");
+    this.percent = config.getInt("Percent chance of anger", MODID, 50, 1, 100, "What percent (%) chance each mob has to be angered, when breaking ore is noticed by all nearby");
+    defaults = new String[] {
+        "minecraft:slowness", };
+    this.potionEffectWhenAngered = config.getStringList("blocks mined", MODID, defaults, "List of blocks that will cause anger when mined.  ");
+    config.save();
 	//tolist
 		
 	}
@@ -68,10 +74,10 @@ public class ModHostileMiners {
 			String blockId = blockstate.getBlock().getRegistryName().toString();
 // blockId if contains
 			if (blockstate.getBlock() == Blocks.QUARTZ_ORE && // TODO config list
-					event.getWorld().provider.getDimension() == nether && world.rand.nextDouble() < 0.2) {
+          event.getWorld().provider.getDimension() == nether && world.rand.nextDouble() * 100 < this.percent) {
 				// then look for one
-				AxisAlignedBB range = makeBoundingBox(pos.getX(), pos.getY(), pos.getZ(), 3, 16);
-				List<EntityPigZombie> found = world.getEntitiesWithinAABB(EntityPigZombie.class, range);
+        AxisAlignedBB region = makeBoundingBox(pos.getX(), pos.getY(), pos.getZ(), rangeHorizontal, rangeVertical);
+				List<EntityPigZombie> found = world.getEntitiesWithinAABB(EntityPigZombie.class, region);
 				for (EntityPigZombie pz : found) {
 					if (pz.isAngry() == false) {
 						logger.info("ENRAGE");
