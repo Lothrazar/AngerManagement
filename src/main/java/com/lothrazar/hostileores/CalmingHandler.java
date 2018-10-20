@@ -17,7 +17,6 @@ public class CalmingHandler {
     this.config = config;
   }
 
-
   @SubscribeEvent
   public void onPlayerHurt(LivingHurtEvent event) {
     if (config.isCalmingOnDeathEnabled() && event.getEntityLiving().getHealth() - event.getAmount() <= 0 &&
@@ -37,8 +36,9 @@ public class CalmingHandler {
           AngerUtils.makeCalm(player, pz);
         }
       }
-      if (triggered > 0 && config.isSendChat())
-        AngerUtils.sendMessage(player, "angermanagement.calm");
+      if (triggered > 0) {
+        //particles?
+      }
     }
   }
 }

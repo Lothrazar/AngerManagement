@@ -12,7 +12,6 @@ public class ConfigManager {
   private int rangeCalmingVertical = 16;
   private int rangeAngerHorizontal = 3;
   private int rangeAngerVertical = 16;
-  private boolean sendChat;
   private boolean calmingOnDeathEnabled;
   //future maybes?  
   //  private int maxNumberSearchedPerOre = 1;
@@ -68,14 +67,6 @@ public class ConfigManager {
     this.rangeAngerVertical = rangeAngerVertical;
   }
 
-  public boolean isSendChat() {
-    return sendChat;
-  }
-
-  public void setSendChat(boolean sendChat) {
-    this.sendChat = sendChat;
-  }
-
   public boolean isCalmingOnDeathEnabled() {
     return calmingOnDeathEnabled;
   }
@@ -84,10 +75,8 @@ public class ConfigManager {
     this.calmingOnDeathEnabled = calmingOnDeathEnabled;
   }
 
-
   public void initConfig(Configuration config) {
     String category = ModHostileMiners.MODID;
-    sendChat = config.getBoolean("sendChatEnabled", category, true, "Toggle if chat messages appear or not");
     category = ModHostileMiners.MODID + ".anger";
     final String[] defaults = new String[] {
         "minecraft:quartz_ore",
@@ -99,10 +88,8 @@ public class ConfigManager {
         "mysticalagriculture:nether_inferium_ore"
     };
     final String[] conf = config.getStringList("blocksMined", category, defaults, "List of blocks that will cause anger when mined.  ");
-
     this.blockIdsToTrigger = NonNullList.from("", conf);
     this.percent = config.getInt("percentChanceAnger", category, 25, 0, 100, "What percent (%) chance that mining will aggro something nearby (0 to disable) ");
-
     this.rangeAngerHorizontal = config.getInt("rangeAngerHorizontal", category, 16, 0, 128,
         "Horizontal range to look and find things to anger");
     this.rangeAngerVertical = config.getInt("rangeAngerVertical", category, 3, 0, 128,

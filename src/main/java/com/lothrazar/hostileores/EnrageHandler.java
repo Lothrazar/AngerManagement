@@ -35,9 +35,6 @@ public class EnrageHandler {
         for (EntityPigZombie pz : found) {
           if (pz.isAngry() == false) {
             AngerUtils.makeAngry(event.getHarvester(), pz);
-            if (config.isSendChat()) {
-              AngerUtils.sendStatus(event.getHarvester(), "angermanagement.angry");
-            }
             break;// one will alert others, its enough 
           }
         }
