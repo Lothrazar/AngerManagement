@@ -43,6 +43,8 @@ public class ModHostileMiners {
     initConfig(new Configuration(event.getSuggestedConfigurationFile()));
     logger = event.getModLog();
     MinecraftForge.EVENT_BUS.register(this);
+    MinecraftForge.EVENT_BUS.register(new EnrageHandler());
+    MinecraftForge.EVENT_BUS.register(new CalmingHandler());
   }
 
   private void initConfig(Configuration config) {
