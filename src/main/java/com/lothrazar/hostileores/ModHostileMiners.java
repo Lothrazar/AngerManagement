@@ -24,7 +24,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 @Mod(modid = ModHostileMiners.MODID)
 public class ModHostileMiners {
 
-  public static final String MODID = "hostileores";
+  public static final String MODID = "angermanagement";
   public static final int NETHER = -1;
   private static Logger logger;
   private List<String> blockIdsToTrigger;
@@ -36,6 +36,7 @@ public class ModHostileMiners {
   //  private int maxNumberSearchedPerOre = 1;
   //  private int maxNumberTriggeredPerOre = 1;
   private boolean sendChat;
+  private boolean calmingOnDeathEnabled;
 
   @EventHandler
   public void preInit(FMLPreInitializationEvent event) {
@@ -45,26 +46,26 @@ public class ModHostileMiners {
   }
 
   private void initConfig(Configuration config) {
-
     String[] defaults = new String[] {
         "minecraft:quartz_ore",
-        "cyclicmagic:nether_gold_ore"
-        //tinkers cobaalt
-        //tinkers a 
-        // nether ore from plant mod
+        "minecraft:chestc",
+        "tconstruct:ore",
+        "cyclicmagic:nether_gold_ore",
+        "cyclicmagic:nether_diamond_ore",
+        "cyclicmagic:nether_emerald_ore",
+        "mysticalagriculture:nether_inferium_ore"
     };
     String[] conf = config.getStringList("BlocksMined", MODID, defaults, "List of blocks that will cause anger when mined.  ");
     //    this.blockIdsToTrigger 
     this.blockIdsToTrigger = NonNullList.from("", conf);
-    
-    this.percent = config.getInt("PercentChanceAnger", MODID, 50, 1, 100, "What percent (%) chance that mining will aggro something nearby ");
+    this.percent = config.getInt("PercentChanceAnger", MODID, 50, 0, 100, "What percent (%) chance that mining will aggro something nearby (0 to disable) ");
     defaults = new String[] {
         "minecraft:slowness",
     };
     //    conf = config.getStringList("PotionOnAngered", MODID, defaults, "Potions given to angered pigmen, delete all potions to disable.  ");
     //    this.potionEffectWhenAngered = NonNullList.from("", conf);
-
-    sendChat = true;
+    this.calmingOnDeathEnabled = config.getBoolean("calmingOnDeathEnabled", MODID, true, "Pigmen will become calm when a nearby player dies");
+    sendChat = config.getBoolean("sendChatEnabled", MODID, true, "Toggle if chat messages appear or not");
     config.save();
     //tolist
   }
@@ -75,24 +76,22 @@ public class ModHostileMiners {
 
   @SubscribeEvent
   public void onPlayerHurt(LivingHurtEvent event) {
-    if (event.getEntityLiving().getHealth() - event.getAmount() <= 0 &&
+    if (calmingOnDeathEnabled && event.getEntityLiving().getHealth() - event.getAmount() <= 0 &&
         event.getEntityLiving() instanceof EntityPlayer) {
       EntityPlayer player = (EntityPlayer) event.getEntityLiving();
       BlockPos pos = player.getPosition();
-      World world = player.world; 
+      World world = player.world;
       //  go make unhostile    
       AxisAlignedBB region = makeBoundingBox(pos.getX(), pos.getY(), pos.getZ(), rangeHorizontal, rangeVertical);
       List<EntityPigZombie> found = world.getEntitiesWithinAABB(EntityPigZombie.class, region);
       int triggered = 0;
       for (EntityPigZombie pz : found) {
-
         if (pz.isAngry()) {
-          logger.info("EN PEACE");
           triggered++;
           this.makeCalm(player, pz);
         }
       }
-      if (triggered > 0)
+      if (triggered > 0 && this.sendChat)
         player.sendMessage(new TextComponentTranslation("Locals have quelled their anger..."));
     }
   }
@@ -104,25 +103,19 @@ public class ModHostileMiners {
       BlockPos pos = event.getPos();
       World world = event.getWorld();
       String blockId = blockstate.getBlock().getRegistryName().toString();
-
       if (this.blockIdsToTrigger.contains(blockId) &&
       //          event.getWorld().provider.getDimension() == NETHER &&  
           world.rand.nextDouble() * 100 < this.percent) {
         // then look for one
         AxisAlignedBB region = makeBoundingBox(pos.getX(), pos.getY(), pos.getZ(), rangeHorizontal, rangeVertical);
         List<EntityPigZombie> found = world.getEntitiesWithinAABB(EntityPigZombie.class, region);
-
         for (EntityPigZombie pz : found) {
-
           if (pz.isAngry() == false) {
             //could use .becomeAngryAt() but it is private 
-
             makeAngry(event.getHarvester(), pz);
             break;// one will alert others, its enough 
           }
-
         }
-
       }
     }
   }
@@ -139,6 +132,7 @@ public class ModHostileMiners {
 
   private void makeAngry(EntityPlayer event, EntityPigZombie pz) {
     pz.attackEntityFrom(DamageSource.causePlayerDamage(event), 0);
-    event.sendStatusMessage(new TextComponentTranslation("Locals are angry..."), true);
+    if (this.sendChat)
+      event.sendStatusMessage(new TextComponentTranslation("Locals are angry..."), true);
   }
 }
