@@ -6,19 +6,84 @@ import net.minecraftforge.common.config.Configuration;
 
 public class ConfigManager {
 
-  public List<String> blockIdsToTrigger;
-  public int percent;
-  public int rangeCalmingHorizontal = 3;
-  public int rangeCalmingVertical = 16;
-  public int rangeAngerHorizontal = 3;
-  public int rangeAngerVertical = 16;
-  public boolean sendChat;
-  public boolean calmingOnDeathEnabled;
+  private List<String> blockIdsToTrigger;
+  private int percent;
+  private int rangeCalmingHorizontal = 3;
+  private int rangeCalmingVertical = 16;
+  private int rangeAngerHorizontal = 3;
+  private int rangeAngerVertical = 16;
+  private boolean sendChat;
+  private boolean calmingOnDeathEnabled;
   //future maybes?  
   //  private int maxNumberSearchedPerOre = 1;
   //  private int maxNumberTriggeredPerOre = 1; 
   //  private List<String> potionEffectWhenAngered;
   //  private List<Integer> dimensionsTrigger;
+
+  public List<String> getBlockIdsToTrigger() {
+    return blockIdsToTrigger;
+  }
+
+  public void setBlockIdsToTrigger(List<String> blockIdsToTrigger) {
+    this.blockIdsToTrigger = blockIdsToTrigger;
+  }
+
+  public int getPercent() {
+    return percent;
+  }
+
+  public void setPercent(int percent) {
+    this.percent = percent;
+  }
+
+  public int getRangeCalmingHorizontal() {
+    return rangeCalmingHorizontal;
+  }
+
+  public void setRangeCalmingHorizontal(int rangeCalmingHorizontal) {
+    this.rangeCalmingHorizontal = rangeCalmingHorizontal;
+  }
+
+  public int getRangeCalmingVertical() {
+    return rangeCalmingVertical;
+  }
+
+  public void setRangeCalmingVertical(int rangeCalmingVertical) {
+    this.rangeCalmingVertical = rangeCalmingVertical;
+  }
+
+  public int getRangeAngerHorizontal() {
+    return rangeAngerHorizontal;
+  }
+
+  public void setRangeAngerHorizontal(int rangeAngerHorizontal) {
+    this.rangeAngerHorizontal = rangeAngerHorizontal;
+  }
+
+  public int getRangeAngerVertical() {
+    return rangeAngerVertical;
+  }
+
+  public void setRangeAngerVertical(int rangeAngerVertical) {
+    this.rangeAngerVertical = rangeAngerVertical;
+  }
+
+  public boolean isSendChat() {
+    return sendChat;
+  }
+
+  public void setSendChat(boolean sendChat) {
+    this.sendChat = sendChat;
+  }
+
+  public boolean isCalmingOnDeathEnabled() {
+    return calmingOnDeathEnabled;
+  }
+
+  public void setCalmingOnDeathEnabled(boolean calmingOnDeathEnabled) {
+    this.calmingOnDeathEnabled = calmingOnDeathEnabled;
+  }
+
 
   public void initConfig(Configuration config) {
     String category = ModHostileMiners.MODID;
