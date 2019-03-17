@@ -13,6 +13,8 @@ public class ConfigManager {
   private int rangeAngerHorizontal = 3;
   private int rangeAngerVertical = 16;
   private boolean calmingOnDeathEnabled;
+  private boolean logEverything;
+  //  private int[] dimensionList; 
   //future maybes?  
   //  private int maxNumberSearchedPerOre = 1;
   //  private int maxNumberTriggeredPerOre = 1; 
@@ -77,14 +79,13 @@ public class ConfigManager {
 
   public void initConfig(Configuration config) {
     String category = ModHostileMiners.MODID;
+    logEverything = config.getBoolean("LogAllEvents", category, false, "Log when a targeted block is mined, and when mob is angered, and probably more.  Very spammy.  Use for debugging and testing your configs.  ");
     category = ModHostileMiners.MODID + ".anger";
     final String[] defaults = new String[] {
         "minecraft:quartz_ore",
         "minecraft:chest",
         "tconstruct:ore",
-        "cyclicmagic:nether_gold_ore",
-        "cyclicmagic:nether_diamond_ore",
-        "cyclicmagic:nether_emerald_ore",
+        "cyclicmagic:*_ore",
         "mysticalagriculture:nether_inferium_ore"
     };
     final String[] conf = config.getStringList("blocksMined", category, defaults, "List of blocks that will cause anger when mined.  ");
@@ -103,5 +104,13 @@ public class ConfigManager {
         "Vertical range to look and find things to calm when player dies");
     config.save();
     //tolist
+  }
+
+  public boolean isLogEverything() {
+    return logEverything;
+  }
+
+  public void setLogEverything(boolean logEverything) {
+    this.logEverything = logEverything;
   }
 }
