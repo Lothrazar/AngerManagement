@@ -31,19 +31,6 @@ public class EnrageHandler {
     }
   }
 
-  //  @SubscribeEvent
-  //  public void onLivingAttackEvent(LivingAttackEvent event) {
-  //    if (config.isPacifyIronGolems()
-  //        && event.getEntityLiving() instanceof EntityPlayer
-  //        && event.getSource() != null
-  //        && event.getSource().getTrueSource() instanceof EntityIronGolem) {
-  //      //cancel the event which means no damage or knockback.
-  //      //its a good start but its still aggrod 
-  //      // event.setCanceled(true);  
-  //    }
-  //
-  //  }
-
   @SubscribeEvent
   public void onLivingDamageEvent(LivingDamageEvent event) {
     if (config.isPacifyIronGolems()
