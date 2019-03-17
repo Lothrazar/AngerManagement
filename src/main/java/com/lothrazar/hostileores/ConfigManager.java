@@ -14,6 +14,7 @@ public class ConfigManager {
   private int rangeAngerVertical = 16;
   private boolean calmingOnDeathEnabled;
   private boolean logEverything;
+  private boolean pacifyIronGolems;
   //  private int[] dimensionList; 
   //future maybes?  
   //  private int maxNumberSearchedPerOre = 1;
@@ -102,6 +103,8 @@ public class ConfigManager {
         "Horizontal range to look and find things to calm when player dies");
     this.rangeCalmingVertical = config.getInt("rangeCalmingVertical", category, 3, 0, 128,
         "Vertical range to look and find things to calm when player dies");
+    category = ModAngerManagement.MODID + ".village_golem";
+    this.pacifyIronGolems = config.getBoolean("PacifyIronGolems", category, true, "If true, aggro from Iron Golems to players is cancelled and damage is nullified");
     config.save();
     //tolist
   }
@@ -112,5 +115,13 @@ public class ConfigManager {
 
   public void setLogEverything(boolean logEverything) {
     this.logEverything = logEverything;
+  }
+
+  public boolean isPacifyIronGolems() {
+    return pacifyIronGolems;
+  }
+
+  public void setPacifyIronGolems(boolean pacifyIronGolems) {
+    this.pacifyIronGolems = pacifyIronGolems;
   }
 }

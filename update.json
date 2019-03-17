@@ -1,11 +1,12 @@
 {
   "homepage": "https://minecraft.curseforge.com/projects/anger-management",
   "promos": {
-    "1.12.2-latest": "1.0.0",
-    "1.12.2-recommended": "1.0.0"
+    "1.12.2-latest": "1.0.2",
+    "1.12.2-recommended": "1.0.2"
   }
   "1.12.2":{
   	"1.0.0":"Release"
   	,"1.0.1":"New config LogAllEvents to help test your configs live in the world.  Config system now supports wildcards such as cyclicmagic:*_ore or tconstruct:* but note it is not limited to ore it looks at all blocks mined.  "
+  	,"1.0.2":"New feature: PacifyIronGolems is turned on by default which disables all aggro and damage from iron golems to players. "
   }
 }

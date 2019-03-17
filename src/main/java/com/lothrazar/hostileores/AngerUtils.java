@@ -1,5 +1,6 @@
 package com.lothrazar.hostileores;
 
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPigZombie;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -26,5 +27,12 @@ public class AngerUtils {
     //could use .becomeAngryAt() but it is private   
     pz.attackEntityFrom(DamageSource.causePlayerDamage(event), 0);
     ModAngerManagement.log("Triggered anger at  " + pz.getPosition());
+  }
+
+  public static void makeCalmGolem(EntityIronGolem golem) {
+    golem.setAttackTarget(null);
+    golem.setRevengeTarget(null);
+    golem.setLastAttackedEntity(null);
+    ModAngerManagement.log("Triggered calming on IronGolem at  " + golem.getPosition());
   }
 }

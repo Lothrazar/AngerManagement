@@ -2,11 +2,15 @@ package com.lothrazar.hostileores;
 
 import java.util.List;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -16,6 +20,41 @@ public class EnrageHandler {
 
   public EnrageHandler(ConfigManager config) {
     this.config = config;
+  }
+
+  @SubscribeEvent
+  public void onLivingUpdateEvent(LivingUpdateEvent event) {
+    if (config.isPacifyIronGolems()
+        && event.getEntityLiving() instanceof EntityIronGolem
+        && event.getEntityLiving().getAttackingEntity() instanceof EntityPlayer) {
+      AngerUtils.makeCalmGolem((EntityIronGolem) event.getEntityLiving());
+    }
+  }
+
+  //  @SubscribeEvent
+  //  public void onLivingAttackEvent(LivingAttackEvent event) {
+  //    if (config.isPacifyIronGolems()
+  //        && event.getEntityLiving() instanceof EntityPlayer
+  //        && event.getSource() != null
+  //        && event.getSource().getTrueSource() instanceof EntityIronGolem) {
+  //      //cancel the event which means no damage or knockback.
+  //      //its a good start but its still aggrod 
+  //      // event.setCanceled(true);  
+  //    }
+  //
+  //  }
+
+  @SubscribeEvent
+  public void onLivingDamageEvent(LivingDamageEvent event) {
+    if (config.isPacifyIronGolems()
+        && event.getEntityLiving() instanceof EntityPlayer &&
+        event.getSource() != null &&
+        event.getSource().getTrueSource() instanceof EntityIronGolem) {
+      //golem attacked player  
+      event.setAmount(0);
+      event.setCanceled(true);
+      ModAngerManagement.log("set damage to zero from golem at  " + event.getSource().getTrueSource().getPosition());
+    }
   }
 
   @SubscribeEvent
