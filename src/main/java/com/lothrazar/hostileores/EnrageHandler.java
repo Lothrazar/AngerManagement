@@ -33,7 +33,7 @@ public class EnrageHandler {
     }
     double diceRoll = world.rand.nextDouble() * 100;
     //          event.getWorld().provider.getDimension() == NETHER &&  
-    ModHostileMiners.log(blockId + " did match and diceroll is  " + diceRoll + " < " + config.getPercent());
+    ModAngerManagement.log(blockId + " did match and diceroll is  " + diceRoll + " < " + config.getPercent());
     //TODO: dimension config 
     if (diceRoll < config.getPercent()) {
       // then look for one

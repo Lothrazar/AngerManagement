@@ -55,7 +55,7 @@ public class UtilString {
       if (matchWildcard) {
         String[] blockIdArray = strFromList.split(":");
         if (blockIdArray.length <= 1) {
-          ModHostileMiners.logger.error("Invalid config value for block : " + strFromList);
+          ModAngerManagement.logger.error("Invalid config value for block : " + strFromList);
           return false;
         }
         String modIdFromList = blockIdArray[0];
@@ -73,5 +73,4 @@ public class UtilString {
     }
     return false;
   }
-
 }

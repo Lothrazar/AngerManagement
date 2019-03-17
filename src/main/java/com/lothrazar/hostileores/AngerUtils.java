@@ -19,12 +19,12 @@ public class AngerUtils {
     sandbox.setShort("Anger", (short) 0);
     sandbox.setString("HurtBy", "");
     pz.readEntityFromNBT(sandbox);
-    ModHostileMiners.log("Triggered calming at  " + pz.getPosition());
+    ModAngerManagement.log("Triggered calming at  " + pz.getPosition());
   }
 
   public static void makeAngry(EntityPlayer event, EntityPigZombie pz) {
     //could use .becomeAngryAt() but it is private   
     pz.attackEntityFrom(DamageSource.causePlayerDamage(event), 0);
-    ModHostileMiners.log("Triggered anger at  " + pz.getPosition());
+    ModAngerManagement.log("Triggered anger at  " + pz.getPosition());
   }
 }

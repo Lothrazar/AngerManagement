@@ -6,13 +6,14 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = ModHostileMiners.MODID, updateJSON = "https://raw.githubusercontent.com/Lothrazar/HostileOres/master/update.json")
-public class ModHostileMiners {
+@Mod(modid = ModAngerManagement.MODID, certificateFingerprint = "@FINGERPRINT@", updateJSON = "https://raw.githubusercontent.com/Lothrazar/HostileOres/master/update.json")
+public class ModAngerManagement {
 
-  @Instance(value = ModHostileMiners.MODID)
-  public static ModHostileMiners instance;
+  @Instance(value = ModAngerManagement.MODID)
+  public static ModAngerManagement instance;
   public static final String MODID = "angermanagement";
   public static final int NETHER = -1;
   public static Logger logger;
@@ -26,6 +27,19 @@ public class ModHostileMiners {
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
     MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
+  }
+
+  @EventHandler
+  public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+    // https://tutorials.darkhax.net/tutorials/jar_signing/
+    String source = (event.getSource() == null) ? "" : event.getSource().getName() + " ";
+    String msg = MODID + " Invalid fingerprint detected! The file " + source + "may have been tampered with. This version will NOT be supported by the author!";
+    if (logger == null) {
+      System.out.println(msg);
+    }
+    else {
+      logger.error(msg);
+    }
   }
 
   public static void log(String string) {

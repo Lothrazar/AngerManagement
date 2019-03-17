@@ -78,9 +78,9 @@ public class ConfigManager {
   }
 
   public void initConfig(Configuration config) {
-    String category = ModHostileMiners.MODID;
+    String category = ModAngerManagement.MODID;
     logEverything = config.getBoolean("LogAllEvents", category, false, "Log when a targeted block is mined, and when mob is angered, and probably more.  Very spammy.  Use for debugging and testing your configs.  ");
-    category = ModHostileMiners.MODID + ".anger";
+    category = ModAngerManagement.MODID + ".anger";
     final String[] defaults = new String[] {
         "minecraft:quartz_ore",
         "minecraft:chest",
@@ -96,7 +96,7 @@ public class ConfigManager {
     this.rangeAngerVertical = config.getInt("rangeAngerVertical", category, 3, 0, 128,
         "Vertical range to look and find things to anger");
     //now calm section
-    category = ModHostileMiners.MODID + ".calm";
+    category = ModAngerManagement.MODID + ".calm";
     this.calmingOnDeathEnabled = config.getBoolean("calmingOnDeathEnabled", category, true, "Pigmen will become calm when a nearby player dies");
     this.rangeCalmingHorizontal = config.getInt("rangeCalmingHorizontal", category, 16, 0, 128,
         "Horizontal range to look and find things to calm when player dies");
