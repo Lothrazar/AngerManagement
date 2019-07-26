@@ -1,9 +1,9 @@
 package com.lothrazar.hostileores;
 
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -13,26 +13,33 @@ public class AngerUtils {
     return new AxisAlignedBB(x - hRadius, y - vRadius, z - hRadius, x + hRadius, y + vRadius, z + hRadius);
   }
 
-  public static void makeCalm(EntityPlayer player, EntityPigZombie pz) {
+  public static void makeCalm(PlayerEntity player, ZombiePigmanEntity pz) {
     //need to set anger timer
-    NBTTagCompound sandbox = new NBTTagCompound();
-    pz.writeEntityToNBT(sandbox);
-    sandbox.setShort("Anger", (short) 0);
-    sandbox.setString("HurtBy", "");
-    pz.readEntityFromNBT(sandbox);
+    CompoundNBT sandbox = new CompoundNBT();
+    pz.writeUnlessRemoved(sandbox);
+    sandbox.putShort("Anger", (short) 0);
+    sandbox.putString("HurtBy", "");
+    pz.read(sandbox);
     ModAngerManagement.log("Triggered calming at  " + pz.getPosition());
   }
 
-  public static void makeAngry(EntityPlayer event, EntityPigZombie pz) {
+  public static void makeAngry(PlayerEntity event, ZombiePigmanEntity pz) {
     //could use .becomeAngryAt() but it is private   
     pz.attackEntityFrom(DamageSource.causePlayerDamage(event), 0);
     ModAngerManagement.log("Triggered anger at  " + pz.getPosition());
   }
 
-  public static void makeCalmGolem(EntityIronGolem golem) {
+  public static void makeCalmGolem(IronGolemEntity golem) {
     golem.setAttackTarget(null);
     golem.setRevengeTarget(null);
     golem.setLastAttackedEntity(null);
     ModAngerManagement.log("Triggered calming on IronGolem at  " + golem.getPosition());
   }
+
+  public static boolean isAngry(ZombiePigmanEntity pz) {
+    CompoundNBT sandbox = new CompoundNBT();
+    pz.writeAdditional(sandbox);
+    return sandbox.getInt("Anger") > 0;
+  }
+
 }

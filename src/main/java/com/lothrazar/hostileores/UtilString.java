@@ -23,8 +23,9 @@
  ******************************************************************************/
 package com.lothrazar.hostileores;
 
-import java.util.List;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.List;
 
 public class UtilString {
 
@@ -44,7 +45,7 @@ public class UtilString {
     if (toMatch == null) {
       return false;
     }
-    String id = toMatch.getResourceDomain();
+    String id = toMatch.getNamespace();
     for (String strFromList : list) {
       if (strFromList == null || strFromList.isEmpty()) {
         continue;//just ignore me
@@ -55,13 +56,13 @@ public class UtilString {
       if (matchWildcard) {
         String[] blockIdArray = strFromList.split(":");
         if (blockIdArray.length <= 1) {
-          ModAngerManagement.logger.error("Invalid config value for block : " + strFromList);
+          ModAngerManagement.LOGGER.error("Invalid config value for block : " + strFromList);
           return false;
         }
         String modIdFromList = blockIdArray[0];
         String blockIdFromList = blockIdArray[1];//has the *
-        String modIdToMatch = toMatch.getResourceDomain();
-        String blockIdToMatch = toMatch.getResourcePath();
+        String modIdToMatch = toMatch.getNamespace();
+        String blockIdToMatch = toMatch.getPath();
         if (modIdFromList.equals(modIdToMatch) == false) {
           continue;
         }

@@ -1,18 +1,21 @@
 package com.lothrazar.hostileores;
 
 import java.util.List;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.monster.EntityIronGolem;
-import net.minecraft.entity.monster.EntityPigZombie;
-import net.minecraft.entity.player.EntityPlayer;
+import java.util.Random;
+
+import net.minecraft.block.BlockState;
+import net.minecraft.entity.monster.ZombiePigmanEntity;
+import net.minecraft.entity.passive.IronGolemEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IWorld;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class EnrageHandler {
 
@@ -25,18 +28,18 @@ public class EnrageHandler {
   @SubscribeEvent
   public void onLivingUpdateEvent(LivingUpdateEvent event) {
     if (config.isPacifyIronGolems()
-        && event.getEntityLiving() instanceof EntityIronGolem
-        && event.getEntityLiving().getAttackingEntity() instanceof EntityPlayer) {
-      AngerUtils.makeCalmGolem((EntityIronGolem) event.getEntityLiving());
+        && event.getEntityLiving() instanceof IronGolemEntity
+        && event.getEntityLiving().getAttackingEntity() instanceof PlayerEntity) {
+      AngerUtils.makeCalmGolem((IronGolemEntity) event.getEntityLiving());
     }
   }
 
   @SubscribeEvent
   public void onLivingDamageEvent(LivingDamageEvent event) {
     if (config.isPacifyIronGolems()
-        && event.getEntityLiving() instanceof EntityPlayer &&
+        && event.getEntityLiving() instanceof PlayerEntity &&
         event.getSource() != null &&
-        event.getSource().getTrueSource() instanceof EntityIronGolem) {
+        event.getSource().getTrueSource() instanceof IronGolemEntity) {
       //golem attacked player  
       event.setAmount(0);
       event.setCanceled(true);
@@ -44,20 +47,21 @@ public class EnrageHandler {
     }
   }
 
+  Random rand = new Random();
   @SubscribeEvent
   public void onHarvestDropsEvent(HarvestDropsEvent event) {
     if (event.getState() == null) {
       return;
     }
-    IBlockState blockstate = event.getState();
+    BlockState blockstate = event.getState();
     BlockPos pos = event.getPos();
-    World world = event.getWorld();
+    IWorld world = event.getWorld();
     ResourceLocation blockId = blockstate.getBlock().getRegistryName();
     boolean matched = UtilString.isInList(config.getBlockIdsToTrigger(), blockstate.getBlock().getRegistryName());
     if (!matched) {
       return;
     }
-    double diceRoll = world.rand.nextDouble() * 100;
+    double diceRoll = rand.nextDouble() * 100;
     //          event.getWorld().provider.getDimension() == NETHER &&  
     ModAngerManagement.log(blockId + " did match and diceroll is  " + diceRoll + " < " + config.getPercent());
     //TODO: dimension config 
@@ -66,9 +70,9 @@ public class EnrageHandler {
       AxisAlignedBB region = AngerUtils.makeBoundingBox(pos.getX(), pos.getY(), pos.getZ(),
           config.getRangeAngerHorizontal(),
           config.getRangeAngerVertical());
-      List<EntityPigZombie> found = world.getEntitiesWithinAABB(EntityPigZombie.class, region);
-      for (EntityPigZombie pz : found) {
-        if (pz.isAngry() == false) {
+      List<ZombiePigmanEntity> found = world.getEntitiesWithinAABB(ZombiePigmanEntity.class, region);
+      for (ZombiePigmanEntity pz : found) {
+        if (AngerUtils.isAngry(pz)  == false) {
           AngerUtils.makeAngry(event.getHarvester(), pz);
           break;// one will alert others, its enough 
         }
