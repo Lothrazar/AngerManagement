@@ -4,6 +4,8 @@ import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.potion.EffectInstance;
+import net.minecraft.potion.Effects;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.AxisAlignedBB;
 
@@ -21,6 +23,8 @@ public class AngerUtils {
     sandbox.putString("HurtBy", "");
     pz.read(sandbox);
     ModAngerManagement.log("Triggered calming at  " + pz.getPosition());
+
+    pz.addPotionEffect(new EffectInstance(Effects.GLOWING,10,1));
   }
 
   public static void makeAngry(PlayerEntity event, ZombiePigmanEntity pz) {
@@ -39,7 +43,7 @@ public class AngerUtils {
   public static boolean isAngry(ZombiePigmanEntity pz) {
     CompoundNBT sandbox = new CompoundNBT();
     pz.writeAdditional(sandbox);
-    return sandbox.getInt("Anger") > 0;
+    return   sandbox.getShort("Anger") > 0;
   }
 
 }

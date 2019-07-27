@@ -13,7 +13,6 @@ import net.minecraftforge.fml.common.Mod;
 @Mod(ModAngerManagement.MODID)
 public class ModAngerManagement {
 
-  private static boolean isLogEverything;
   String certificateFingerprint = "@FINGERPRINT@";
   public static final String MODID = "angermanagement";
   public static final int NETHER = -1;
@@ -29,8 +28,8 @@ public class ModAngerManagement {
     //only for server starting
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(this);
-    //    MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
-    //    MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
+    MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
+    MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
   }
 
   private void setup(FMLCommonSetupEvent event) {
@@ -51,8 +50,8 @@ public class ModAngerManagement {
   }
 
   public static void log(String string) {
-    if (isLogEverything) {
+
       LOGGER.info(string);
-    }
+
   }
 }
