@@ -12,7 +12,7 @@ public class ConfigManager {
   private int rangeAngerHorizontal = 16;
   private int rangeAngerVertical = 3;
   private boolean calmingOnDeathEnabled = true;
-  private boolean logEverything = true;
+  private boolean logEverything = false;
   private boolean pacifyIronGolems = true;
   //  private int[] dimensionList;
   //future maybes?

@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
+import sun.security.krb5.Config;
 
 @Mod(ModAngerManagement.MODID)
 public class ModAngerManagement {
@@ -17,10 +18,10 @@ public class ModAngerManagement {
   public static final String MODID = "angermanagement";
   public static final int NETHER = -1;
   public static final Logger LOGGER = LogManager.getLogger();
-  public ConfigManager config;
+  public static ConfigManager config;
 
   public ModAngerManagement() {
-    this.config = new ConfigManager();
+     config = new ConfigManager();
     //    config.initConfig(new Configuration(event.getSuggestedConfigurationFile()));
     //    logger = event.getModLog();
     // Register the setup method for modloading
@@ -49,7 +50,7 @@ public class ModAngerManagement {
   }
 
   public static void log(String string) {
-
+if(config.isLogEverything())
       LOGGER.info(string);
 
   }
