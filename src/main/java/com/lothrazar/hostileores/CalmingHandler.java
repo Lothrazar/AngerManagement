@@ -36,6 +36,7 @@ public class CalmingHandler {
         if (AngerUtils.isAngry(pz)) {
           triggered++;
           AngerUtils.makeCalm(player, pz);
+//          pz.dir
         }
         else {
           pz.removePotionEffect(Effects.GLOWING);

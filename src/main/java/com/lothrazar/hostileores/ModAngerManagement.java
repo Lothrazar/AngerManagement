@@ -27,7 +27,6 @@ public class ModAngerManagement {
     FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);
     //only for server starting
     MinecraftForge.EVENT_BUS.register(this);
-    MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
     MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
   }

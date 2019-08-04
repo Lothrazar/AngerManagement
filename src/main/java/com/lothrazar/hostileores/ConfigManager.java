@@ -8,9 +8,9 @@ public class ConfigManager {
   private List<String> blockIdsToTrigger;
   private int percent;
   private int rangeCalmingHorizontal = 3;
-  private int rangeCalmingVertical = 16;
-  private int rangeAngerHorizontal = 3;
-  private int rangeAngerVertical = 16;
+  private int rangeCalmingVertical = 3;
+  private int rangeAngerHorizontal = 16;
+  private int rangeAngerVertical = 3;
   private boolean calmingOnDeathEnabled = true;
   private boolean logEverything = true;
   private boolean pacifyIronGolems = true;
