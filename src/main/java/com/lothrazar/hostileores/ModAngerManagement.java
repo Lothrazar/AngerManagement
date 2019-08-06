@@ -2,7 +2,6 @@ package com.lothrazar.hostileores;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -11,37 +10,36 @@ import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
 @Mod(ModAngerManagement.MODID)
 public class ModAngerManagement {
 
-	String certificateFingerprint = "@FINGERPRINT@";
-	public static final String MODID = "angermanagement";
-	public static final int NETHER = -1;
-	public static final Logger LOGGER = LogManager.getLogger();
-	public static ConfigManager config;
+  String certificateFingerprint = "@FINGERPRINT@";
+  public static final String MODID = "angermanagement";
+  public static final int NETHER = -1;
+  public static final Logger LOGGER = LogManager.getLogger();
+  public static ConfigManager config;
 
-	public ModAngerManagement() {
-		config = new ConfigManager();
+  public ModAngerManagement() {
+    config = new ConfigManager();
+    // only for server starting
+    MinecraftForge.EVENT_BUS.register(this);
+    MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
+    MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
+  }
 
-		// only for server starting
-		MinecraftForge.EVENT_BUS.register(this);
-		MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
-		MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
-	}
+  @SubscribeEvent
+  public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+    // https://tutorials.darkhax.net/tutorials/jar_signing/
+    String source = (event.getSource() == null) ? "" : event.getSource().getName() + " ";
+    String msg = MODID + " Invalid fingerprint detected! The file " + source
+        + "may have been tampered with. This version will NOT be supported by the author!";
+    if (LOGGER == null) {
+      System.out.println(msg);
+    }
+    else {
+      LOGGER.error(msg);
+    }
+  }
 
-	@SubscribeEvent
-	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
-		// https://tutorials.darkhax.net/tutorials/jar_signing/
-		String source = (event.getSource() == null) ? "" : event.getSource().getName() + " ";
-		String msg = MODID + " Invalid fingerprint detected! The file " + source
-				+ "may have been tampered with. This version will NOT be supported by the author!";
-		if (LOGGER == null) {
-			System.out.println(msg);
-		} else {
-			LOGGER.error(msg);
-		}
-	}
-
-	public static void log(String string) {
-		if (config.isLogEverything())
-			LOGGER.info(string);
-
-	}
+  public static void log(String string) {
+    if (config.isLogEverything())
+      LOGGER.info(string);
+  }
 }
