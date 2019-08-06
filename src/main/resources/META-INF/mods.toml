@@ -29,7 +29,7 @@ credits="Thanks for this example mod goes to Java" #optional
 authors="Lothrazar" #optional
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-A small mod by Lothrazar
+Pigmen become peaceful when they notice a player death.  Iron Golems never attack players. 
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
 [[dependencies.examplemod]] #optional
