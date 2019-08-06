@@ -23,55 +23,57 @@
  ******************************************************************************/
 package com.lothrazar.hostileores;
 
-import net.minecraft.util.ResourceLocation;
-
 import java.util.List;
+
+import net.minecraft.util.ResourceLocation;
 
 public class UtilString {
 
-  /**
-   * One day i might make this a setting or an input arg for now i have no use to turn it off
-   */
-  public static final boolean matchWildcard = true;
+	/**
+	 * One day i might make this a setting or an input arg for now i have no use
+	 * to turn it off
+	 */
+	public static final boolean matchWildcard = true;
 
-  /**
-   * If the list has "hc:*_sapling" and input is "hc:whatever_sapling" then match is true
-   * 
-   * @param list
-   * @param toMatch
-   * @return
-   */
-  public static boolean isInList(final List<String> list, ResourceLocation toMatch) {
-    if (toMatch == null) {
-      return false;
-    }
-    String id = toMatch.getNamespace();
-    for (String strFromList : list) {
-      if (strFromList == null || strFromList.isEmpty()) {
-        continue;//just ignore me
-      }
-      if (strFromList.equals(id)) {
-        return true;
-      }
-      if (matchWildcard) {
-        String[] blockIdArray = strFromList.split(":");
-        if (blockIdArray.length <= 1) {
-          ModAngerManagement.LOGGER.error("Invalid config value for block : " + strFromList);
-          return false;
-        }
-        String modIdFromList = blockIdArray[0];
-        String blockIdFromList = blockIdArray[1];//has the *
-        String modIdToMatch = toMatch.getNamespace();
-        String blockIdToMatch = toMatch.getPath();
-        if (modIdFromList.equals(modIdToMatch) == false) {
-          continue;
-        }
-        String blockIdListWC = blockIdFromList.replace("*", "");
-        if (blockIdToMatch.contains(blockIdListWC)) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
+	/**
+	 * If the list has "hc:*_sapling" and input is "hc:whatever_sapling" then
+	 * match is true
+	 * 
+	 * @param list
+	 * @param toMatch
+	 * @return
+	 */
+	public static boolean isInList(final List<String> list, ResourceLocation toMatch) {
+		if (toMatch == null) {
+			return false;
+		}
+		String id = toMatch.getNamespace();
+		for (String strFromList : list) {
+			if (strFromList == null || strFromList.isEmpty()) {
+				continue;// just ignore me
+			}
+			if (strFromList.equals(id)) {
+				return true;
+			}
+			if (matchWildcard) {
+				String[] blockIdArray = strFromList.split(":");
+				if (blockIdArray.length <= 1) {
+					ModAngerManagement.LOGGER.error("Invalid config value for block : " + strFromList);
+					return false;
+				}
+				String modIdFromList = blockIdArray[0];
+				String blockIdFromList = blockIdArray[1];// has the *
+				String modIdToMatch = toMatch.getNamespace();
+				String blockIdToMatch = toMatch.getPath();
+				if (modIdFromList.equals(modIdToMatch) == false) {
+					continue;
+				}
+				String blockIdListWC = blockIdFromList.replace("*", "");
+				if (blockIdToMatch.contains(blockIdListWC)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

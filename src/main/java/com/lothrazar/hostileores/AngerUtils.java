@@ -11,39 +11,39 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class AngerUtils {
 
-  public static AxisAlignedBB makeBoundingBox(double x, double y, double z, int hRadius, int vRadius) {
-    return new AxisAlignedBB(x - hRadius, y - vRadius, z - hRadius, x + hRadius, y + vRadius, z + hRadius);
-  }
+	public static AxisAlignedBB makeBoundingBox(double x, double y, double z, int hRadius, int vRadius) {
+		return new AxisAlignedBB(x - hRadius, y - vRadius, z - hRadius, x + hRadius, y + vRadius, z + hRadius);
+	}
 
-  public static void makeCalm(PlayerEntity player, ZombiePigmanEntity pz) {
-    //need to set anger timer
-    CompoundNBT sandbox = new CompoundNBT();
-    pz.writeUnlessRemoved(sandbox);
-    sandbox.putShort("Anger", (short) 0);
-    sandbox.putString("HurtBy", "");
-    pz.read(sandbox);
-    ModAngerManagement.log("Triggered calming at  " + pz.getPosition());
+	public static void makeCalm(PlayerEntity player, ZombiePigmanEntity pz) {
+		// need to set anger timer
+		CompoundNBT sandbox = new CompoundNBT();
+		pz.writeUnlessRemoved(sandbox);
+		sandbox.putShort("Anger", (short) 0);
+		sandbox.putString("HurtBy", "");
+		pz.read(sandbox);
+		ModAngerManagement.log("Triggered calming at  " + pz.getPosition());
 
-    pz.addPotionEffect(new EffectInstance(Effects.GLOWING,10,1));
-  }
+		pz.addPotionEffect(new EffectInstance(Effects.GLOWING, 10, 1));
+	}
 
-  public static void makeAngry(PlayerEntity event, ZombiePigmanEntity pz) {
-    //could use .becomeAngryAt() but it is private   
-    pz.attackEntityFrom(DamageSource.causePlayerDamage(event), 0);
-    ModAngerManagement.log("Triggered anger at  " + pz.getPosition());
-  }
+	public static void makeAngry(PlayerEntity event, ZombiePigmanEntity pz) {
+		// could use .becomeAngryAt() but it is private
+		pz.attackEntityFrom(DamageSource.causePlayerDamage(event), 0);
+		ModAngerManagement.log("Triggered anger at  " + pz.getPosition());
+	}
 
-  public static void makeCalmGolem(IronGolemEntity golem) {
-    golem.setAttackTarget(null);
-    golem.setRevengeTarget(null);
-    golem.setLastAttackedEntity(null);
-    ModAngerManagement.log("Triggered calming on IronGolem at  " + golem.getPosition());
-  }
+	public static void makeCalmGolem(IronGolemEntity golem) {
+		golem.setAttackTarget(null);
+		golem.setRevengeTarget(null);
+		golem.setLastAttackedEntity(null);
+		ModAngerManagement.log("Triggered calming on IronGolem at  " + golem.getPosition());
+	}
 
-  public static boolean isAngry(ZombiePigmanEntity pz) {
-    CompoundNBT sandbox = new CompoundNBT();
-    pz.writeAdditional(sandbox);
-    return   sandbox.getShort("Anger") > 0;
-  }
+	public static boolean isAngry(ZombiePigmanEntity pz) {
+		CompoundNBT sandbox = new CompoundNBT();
+		pz.writeAdditional(sandbox);
+		return sandbox.getShort("Anger") > 0;
+	}
 
 }
