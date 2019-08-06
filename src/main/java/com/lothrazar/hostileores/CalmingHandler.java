@@ -20,9 +20,10 @@ public class CalmingHandler {
 
   @SubscribeEvent
   public void onPlayerHurt(LivingHurtEvent event) {
-    if (config.isCalmingOnDeathEnabled() && // event.getEntityLiving().getHealth()
-    // - event.getAmount() <= 0 &&
-        event.getEntityLiving() instanceof PlayerEntity) {
+    if (config.isCalmingOnDeathEnabled() && 
+         event.getEntityLiving().getHealth() - event.getAmount() <= 0 &&
+    
+        event.getEntityLiving() instanceof PlayerEntity) { 
       PlayerEntity player = (PlayerEntity) event.getEntityLiving();
       BlockPos pos = player.getPosition();
       World world = player.world;
@@ -32,17 +33,13 @@ public class CalmingHandler {
       List<ZombiePigmanEntity> found = world.getEntitiesWithinAABB(ZombiePigmanEntity.class, region);
       int triggered = 0;
       for (ZombiePigmanEntity pz : found) {
-        if (AngerUtils.isAngry(pz)) {
+      //  if (AngerUtils.isAngry(pz)) {
           triggered++;
           AngerUtils.makeCalm(player, pz);
-          // pz.dir
-        }
-        else {
-          pz.removePotionEffect(Effects.GLOWING);
-        }
+      //  }
       }
+      ModAngerManagement.log("is angry?  calm triggered  " + triggered);
       if (triggered > 0) {
-        ModAngerManagement.log("is angry?  calm triggered  " + triggered);
         // particles?
       }
     }

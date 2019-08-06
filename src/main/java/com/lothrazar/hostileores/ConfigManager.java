@@ -1,18 +1,19 @@
 package com.lothrazar.hostileores;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigManager {
 
-  private List<String> blockIdsToTrigger;
+  private List<String> blockIdsToTrigger= new ArrayList<>();
   private int percent;
   private int rangeCalmingHorizontal = 3;
   private int rangeCalmingVertical = 3;
   private int rangeAngerHorizontal = 16;
   private int rangeAngerVertical = 3;
   private boolean calmingOnDeathEnabled = true;
-  private boolean logEverything = false;
   private boolean pacifyIronGolems = true;
+  private boolean logEverything = false ;
   // private int[] dimensionList;
   // future maybes?
   // private int maxNumberSearchedPerOre = 1;

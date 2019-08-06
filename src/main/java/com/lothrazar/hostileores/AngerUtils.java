@@ -22,8 +22,8 @@ public class AngerUtils {
     sandbox.putShort("Anger", (short) 0);
     sandbox.putString("HurtBy", "");
     pz.read(sandbox);
-    ModAngerManagement.log("Triggered calming at  " + pz.getPosition());
-    pz.addPotionEffect(new EffectInstance(Effects.GLOWING, 10, 1));
+    ModAngerManagement.log(pz.world.isRemote + "=isRemote ; Triggered calming at  " + pz.getPosition());
+    pz.addPotionEffect(new EffectInstance(Effects.GLOWING, 60 * 20, 1));  
   }
 
   public static void makeAngry(PlayerEntity event, ZombiePigmanEntity pz) {
