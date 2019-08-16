@@ -1,5 +1,6 @@
-package com.lothrazar.hostileores;
+package com.lothrazar.angermanagement.util;
 
+import com.lothrazar.angermanagement.ModAngerManagement;
 import net.minecraft.entity.monster.ZombiePigmanEntity;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.player.PlayerEntity;

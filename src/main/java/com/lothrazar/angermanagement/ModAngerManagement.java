@@ -1,7 +1,9 @@
-package com.lothrazar.hostileores;
+package com.lothrazar.angermanagement;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.lothrazar.angermanagement.config.ConfigManager;
+import com.lothrazar.angermanagement.event.EnrageHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -21,7 +23,6 @@ public class ModAngerManagement {
     // only for server starting
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));
-    MinecraftForge.EVENT_BUS.register(new CalmingHandler(config));
   }
 
   @SubscribeEvent

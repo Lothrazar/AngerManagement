@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package com.lothrazar.hostileores;
+package com.lothrazar.angermanagement.util;
 
 import java.util.List;
+import com.lothrazar.angermanagement.ModAngerManagement;
 import net.minecraft.util.ResourceLocation;
 
 public class UtilString {
