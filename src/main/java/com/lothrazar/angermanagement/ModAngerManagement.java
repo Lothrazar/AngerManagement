@@ -8,6 +8,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLFingerprintViolationEvent;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 @Mod(ModAngerManagement.MODID)
 public class ModAngerManagement {
@@ -19,7 +20,7 @@ public class ModAngerManagement {
   public static ConfigManager config;
 
   public ModAngerManagement() {
-    config = new ConfigManager();
+    config = new ConfigManager(FMLPaths.CONFIGDIR.get().resolve(MODID + ".toml"));
     // only for server starting
     MinecraftForge.EVENT_BUS.register(this);
     MinecraftForge.EVENT_BUS.register(new EnrageHandler(config));

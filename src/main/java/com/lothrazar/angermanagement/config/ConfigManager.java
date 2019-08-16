@@ -1,9 +1,32 @@
 package com.lothrazar.angermanagement.config;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
+import com.electronwill.nightconfig.core.io.WritingMode;
+import com.lothrazar.angermanagement.ModAngerManagement;
+import net.minecraftforge.common.ForgeConfigSpec;
 
 public class ConfigManager {
+
+  private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
+  private static ForgeConfigSpec COMMON_CONFIG;
+  public static ForgeConfigSpec.BooleanValue calmingOnDeathEnabled;
+  static {
+    initConfig();
+  }
+
+  private static void initConfig() {
+    COMMON_BUILDER.comment("settings").push(ModAngerManagement.MODID);
+    calmingOnDeathEnabled = COMMON_BUILDER.comment("Will pigmen attempt to calm anger when a nearby player dies").define("calmingOnDeathEnabled", true);
+    //    GRASS_MIDNIGHT = COMMON_BUILDER.comment("Allows bonemeal to work during midnight, "
+    //        + "but only on grass (to grow flowers, maybe a rare firework).  "
+    //        + "If false it just never works on grass just like other blocks. ")
+    //        .define("grassMidnight", true);
+    COMMON_BUILDER.pop();
+    COMMON_CONFIG = COMMON_BUILDER.build();
+  }
 
   private List<String> blockIdsToTrigger = new ArrayList<>();
   private int percent;
@@ -11,7 +34,6 @@ public class ConfigManager {
   private int rangeCalmingVertical = 3;
   private int rangeAngerHorizontal = 16;
   private int rangeAngerVertical = 3;
-  private boolean calmingOnDeathEnabled = true;
   private boolean pacifyIronGolems = true;
   private boolean logEverything = false;
   // private int[] dimensionList;
@@ -20,6 +42,16 @@ public class ConfigManager {
   // private int maxNumberTriggeredPerOre = 1;
   // private List<String> potionEffectWhenAngered;
   // private List<Integer> dimensionsTrigger;
+
+  public ConfigManager(Path path) {
+    final CommentedFileConfig configData = CommentedFileConfig.builder(path)
+        .sync()
+        .autosave()
+        .writingMode(WritingMode.REPLACE)
+        .build();
+    configData.load();
+    COMMON_CONFIG.setConfig(configData);
+  }
 
   public List<String> getBlockIdsToTrigger() {
     return blockIdsToTrigger;
@@ -46,7 +78,7 @@ public class ConfigManager {
   }
 
   public boolean isCalmingOnDeathEnabled() {
-    return calmingOnDeathEnabled;
+    return calmingOnDeathEnabled.get();
   }
   // public void initConfig(Configuration config) {
   // String category = ModAngerManagement.MODID;
