@@ -12,8 +12,8 @@
   	,"1.0.2":"New feature: PacifyIronGolems is turned on by default which disables all aggro and damage from iron golems to players. "
   },
   "1.14.4":{
-  "0.0.1":"Port",
-  "0.0.2":"Fixed a crash from a bad class import.  Fix pacification range. ",
-  "0.1.0":""
+    "0.0.1":"Port",
+    "0.0.2":"Fixed a crash from a bad class import.  Fix pacification range. ",
+    "0.1.0":"Config file added.  Fixed a few bugs for pigmen."
   }
 }

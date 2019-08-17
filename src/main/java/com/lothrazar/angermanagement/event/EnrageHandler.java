@@ -19,7 +19,6 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.world.BlockEvent;
-import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 public class EnrageHandler {
@@ -83,11 +82,6 @@ public class EnrageHandler {
         }
       }
     }
-  }
-
-  @SubscribeEvent
-  public void onHarvestDropsEvent(HarvestDropsEvent event) {
-    ModAngerManagement.log("HarvestDropsEvent");
   }
 
   @SubscribeEvent
