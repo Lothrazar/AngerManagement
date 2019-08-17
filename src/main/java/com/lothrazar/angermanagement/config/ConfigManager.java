@@ -1,47 +1,54 @@
 package com.lothrazar.angermanagement.config;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 import com.electronwill.nightconfig.core.io.WritingMode;
+import com.google.common.collect.ImmutableList;
 import com.lothrazar.angermanagement.ModAngerManagement;
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.ForgeConfigSpec.IntValue;
 
 public class ConfigManager {
 
   private static final ForgeConfigSpec.Builder COMMON_BUILDER = new ForgeConfigSpec.Builder();
   private static ForgeConfigSpec COMMON_CONFIG;
   public static ForgeConfigSpec.BooleanValue calmingOnDeathEnabled;
+  private static BooleanValue logSpam;
   static {
     initConfig();
   }
 
   private static void initConfig() {
     COMMON_BUILDER.comment("settings").push(ModAngerManagement.MODID);
-    calmingOnDeathEnabled = COMMON_BUILDER.comment("Will pigmen attempt to calm anger when a nearby player dies").define("calmingOnDeathEnabled", true);
-    //    GRASS_MIDNIGHT = COMMON_BUILDER.comment("Allows bonemeal to work during midnight, "
-    //        + "but only on grass (to grow flowers, maybe a rare firework).  "
-    //        + "If false it just never works on grass just like other blocks. ")
-    //        .define("grassMidnight", true);
+    logSpam = COMMON_BUILDER.comment("If you are testing all different combinations of config values for packdev, and want to log spam lots of info turn this on ")
+        .define("logSpamStuffToTest", false);
+    calmingOnDeathEnabled = COMMON_BUILDER.comment("Pigmen will become calm when a nearby player dies ").define("zombiepig.calming.onDeathEnabled", true);
+    pacifyIronGolems = COMMON_BUILDER.comment("If true, aggro from Iron Golems to players is cancelled and damage is nullified ").define("irongolem.neverAttackPlayer", true);
+    rangeCalmingHorizontal = COMMON_BUILDER.comment("Horizontal range to look and find things to calm when player dies").defineInRange("zombiepig.calming.rangeHorizontal", 6, 1, 16);
+    rangeCalmingVertical = COMMON_BUILDER.comment("Vertical range to look and find things to calm when player dies").defineInRange("zombiepig.calming.rangeVertical", 3, 1, 16);
+    rangeAngerVertical = COMMON_BUILDER.comment("Horizontal range to look and find things to anger ").defineInRange("zombiepig.anger.rangeHorizontal", 16, 1, 16);
+    rangeCalmingVertical = COMMON_BUILDER.comment("Vertical range to look and find things to anger ").defineInRange("zombiepig.anger.rangeVertical", 3, 1, 16);
+    rangeCalmingVertical = COMMON_BUILDER.comment("What percent (%) chance that mining will aggro something nearby (0 zero to disable)").defineInRange("zombiepig.anger.percentChance", 0, 1, 100);
+    blockIdsToTrigger = COMMON_BUILDER.comment("List of blocks that will cause anger when mined.").defineList("zombiepig.anger.blocksMined",
+        ImmutableList.of(
+            "minecraft:nether_quartz_ore",
+            "minecraft:nether_wart",
+            "minecraft:chest"),
+        obj -> obj instanceof String);
     COMMON_BUILDER.pop();
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
-  private List<String> blockIdsToTrigger = new ArrayList<>();
-  private int percent;
-  private int rangeCalmingHorizontal = 3;
-  private int rangeCalmingVertical = 3;
-  private int rangeAngerHorizontal = 16;
-  private int rangeAngerVertical = 3;
-  private boolean pacifyIronGolems = true;
-  private boolean logEverything = false;
-  // private int[] dimensionList;
-  // future maybes?
-  // private int maxNumberSearchedPerOre = 1;
-  // private int maxNumberTriggeredPerOre = 1;
-  // private List<String> potionEffectWhenAngered;
-  // private List<Integer> dimensionsTrigger;
+  private static ConfigValue<List<? extends String>> blockIdsToTrigger;
+  private static IntValue percent;
+  private static IntValue rangeCalmingHorizontal;
+  private static IntValue rangeCalmingVertical;
+  private static IntValue rangeAngerHorizontal;
+  private static IntValue rangeAngerVertical;
+  private static BooleanValue pacifyIronGolems;
 
   public ConfigManager(Path path) {
     final CommentedFileConfig configData = CommentedFileConfig.builder(path)
@@ -54,80 +61,38 @@ public class ConfigManager {
   }
 
   public List<String> getBlockIdsToTrigger() {
-    return blockIdsToTrigger;
+    return (List<String>) blockIdsToTrigger.get();
   }
 
   public int getPercent() {
-    return percent;
+    return percent.get();
   }
 
   public int getRangeCalmingHorizontal() {
-    return rangeCalmingHorizontal;
+    return rangeCalmingHorizontal.get();
   }
 
   public int getRangeCalmingVertical() {
-    return rangeCalmingVertical;
+    return rangeCalmingVertical.get();
   }
 
   public int getRangeAngerHorizontal() {
-    return rangeAngerHorizontal;
+    return rangeAngerHorizontal.get();
   }
 
   public int getRangeAngerVertical() {
-    return rangeAngerVertical;
+    return rangeAngerVertical.get();
   }
 
   public boolean isCalmingOnDeathEnabled() {
     return calmingOnDeathEnabled.get();
   }
-  // public void initConfig(Configuration config) {
-  // String category = ModAngerManagement.MODID;
-  // logEverything = config.getBoolean("LogAllEvents", category, false, "Log
-  // when a targeted block is mined, and when mob is angered, and probably
-  // more. Very spammy. Use for debugging and testing your configs. ");
-  // category = ModAngerManagement.MODID + ".anger";
-  // final String[] defaults = new String[] {
-  // "minecraft:quartz_ore",
-  // "minecraft:chest",
-  // "tconstruct:ore",
-  // "cyclicmagic:*_ore",
-  // "mysticalagriculture:nether_inferium_ore"
-  // };
-  // final String[] conf = config.getStringList("blocksMined", category,
-  // defaults, "List of blocks that will cause anger when mined. ");
-  // this.blockIdsToTrigger = NonNullList.from("", conf);
-  // this.percent = config.getInt("percentChanceAnger", category, 25, 0, 100,
-  // "What percent (%) chance that mining will aggro something nearby (0 to
-  // disable) ");
-  // this.rangeAngerHorizontal = config.getInt("rangeAngerHorizontal",
-  // category, 16, 0, 128,
-  // "Horizontal range to look and find things to anger");
-  // this.rangeAngerVertical = config.getInt("rangeAngerVertical", category,
-  // 3, 0, 128,
-  // "Vertical range to look and find things to anger");
-  // //now calm section
-  // category = ModAngerManagement.MODID + ".calm";
-  // this.calmingOnDeathEnabled = config.getBoolean("calmingOnDeathEnabled",
-  // category, true, "Pigmen will become calm when a nearby player dies");
-  // this.rangeCalmingHorizontal = config.getInt("rangeCalmingHorizontal",
-  // category, 16, 0, 128,
-  // "Horizontal range to look and find things to calm when player dies");
-  // this.rangeCalmingVertical = config.getInt("rangeCalmingVertical",
-  // category, 3, 0, 128,
-  // "Vertical range to look and find things to calm when player dies");
-  // category = ModAngerManagement.MODID + ".village_golem";
-  // this.pacifyIronGolems = config.getBoolean("PacifyIronGolems", category,
-  // true, "If true, aggro from Iron Golems to players is cancelled and damage
-  // is nullified");
-  // config.save();
-  // //tolist
-  // }
 
   public boolean isLogEverything() {
-    return logEverything;
+    return logSpam.get();
   }
 
   public boolean isPacifyIronGolems() {
-    return pacifyIronGolems;
+    return pacifyIronGolems.get();
   }
 }

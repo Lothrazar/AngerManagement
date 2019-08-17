@@ -18,6 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -51,7 +52,13 @@ public class EnrageHandler {
   }
 
   @SubscribeEvent
+  public void onBreak(BlockEvent.BreakEvent event) {
+    ModAngerManagement.log("BreakEvent ");
+  }
+
+  @SubscribeEvent
   public void onHarvestDropsEvent(HarvestDropsEvent event) {
+    ModAngerManagement.log("HarvestDropsEvent");
     if (event.getState() == null) {
       return;
     }
@@ -61,6 +68,7 @@ public class EnrageHandler {
     ResourceLocation blockId = blockstate.getBlock().getRegistryName();
     boolean matched = UtilString.isInList(config.getBlockIdsToTrigger(), blockstate.getBlock().getRegistryName());
     if (!matched) {
+      ModAngerManagement.log(blockId + " broken not in ocnfig list   " + config.getBlockIdsToTrigger());
       return;
     }
     double diceRoll = rand.nextDouble() * 100;
