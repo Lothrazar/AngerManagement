@@ -25,29 +25,32 @@ public class ConfigManager {
     COMMON_BUILDER.comment("settings").push(ModAngerManagement.MODID);
     logSpam = COMMON_BUILDER.comment("If you are testing all different combinations of config values for packdev, and want to log spam lots of info turn this on ")
         .define("logSpamStuffToTest", false);
-    calmingOnDeathEnabled = COMMON_BUILDER.comment("Pigmen will become calm when a nearby player dies ").define("zombiepig.calming.onDeathEnabled", true);
     pacifyIronGolems = COMMON_BUILDER.comment("If true, aggro from Iron Golems to players is cancelled and damage is nullified ").define("irongolem.neverAttackPlayer", true);
-    rangeCalmingHorizontal = COMMON_BUILDER.comment("Horizontal range to look and find things to calm when player dies").defineInRange("zombiepig.calming.rangeHorizontal", 6, 1, 16);
-    rangeCalmingVertical = COMMON_BUILDER.comment("Vertical range to look and find things to calm when player dies").defineInRange("zombiepig.calming.rangeVertical", 3, 1, 16);
-    rangeAngerVertical = COMMON_BUILDER.comment("Horizontal range to look and find things to anger ").defineInRange("zombiepig.anger.rangeHorizontal", 16, 1, 16);
-    rangeCalmingVertical = COMMON_BUILDER.comment("Vertical range to look and find things to anger ").defineInRange("zombiepig.anger.rangeVertical", 3, 1, 16);
-    rangeCalmingVertical = COMMON_BUILDER.comment("What percent (%) chance that mining will aggro something nearby (0 zero to disable)").defineInRange("zombiepig.anger.percentChance", 0, 1, 100);
-    blockIdsToTrigger = COMMON_BUILDER.comment("List of blocks that will cause anger when mined.").defineList("zombiepig.anger.blocksMined",
-        ImmutableList.of(
-            "minecraft:nether_quartz_ore",
-            "minecraft:nether_wart",
-            "minecraft:chest"),
-        obj -> obj instanceof String);
+    // calm
+    calmingOnDeathEnabled = COMMON_BUILDER.comment("Pigmen will become calm when a nearby player dies ").define("zombiepig.calming.onDeathEnabled", true);
+    calmingHorizontal = COMMON_BUILDER.comment("Horizontal range to look and find things to calm when player dies").defineInRange("zombiepig.calming.rangeHorizontal", 6, 1, 16);
+    calmingVertical = COMMON_BUILDER.comment("Vertical range to look and find things to calm when player dies").defineInRange("zombiepig.calming.rangeVertical", 3, 1, 16);
+    //now the anger ones
+    angerHorizontal = COMMON_BUILDER.comment("Horizontal range to look and find things to anger ").defineInRange("zombiepig.anger.rangeHorizontal", 16, 1, 16);
+    angerVertical = COMMON_BUILDER.comment("Vertical range to look and find things to anger ").defineInRange("zombiepig.anger.rangeVertical", 3, 1, 16);
+    angerPercent = COMMON_BUILDER.comment("What percent (%) chance that mining will aggro something nearby (0 zero to disable)").defineInRange("zombiepig.anger.percentChance", 25, 0, 100);
+    blockIdsToTrigger = COMMON_BUILDER.comment("List of blocks that will cause anger when mined.  Uses 'net.minecraftforge.event.world.BlockEvent.BreakEvent'.")
+        .defineList("zombiepig.anger.blocksMined",
+            ImmutableList.of(
+                "minecraft:nether_quartz_ore",
+                "minecraft:nether_wart",
+                "minecraft:chest"),
+            obj -> obj instanceof String);
     COMMON_BUILDER.pop();
     COMMON_CONFIG = COMMON_BUILDER.build();
   }
 
   private static ConfigValue<List<? extends String>> blockIdsToTrigger;
-  private static IntValue percent;
-  private static IntValue rangeCalmingHorizontal;
-  private static IntValue rangeCalmingVertical;
-  private static IntValue rangeAngerHorizontal;
-  private static IntValue rangeAngerVertical;
+  private static ForgeConfigSpec.IntValue angerPercent;
+  private static IntValue calmingHorizontal;
+  private static IntValue calmingVertical;
+  private static IntValue angerHorizontal;
+  private static IntValue angerVertical;
   private static BooleanValue pacifyIronGolems;
 
   public ConfigManager(Path path) {
@@ -65,23 +68,23 @@ public class ConfigManager {
   }
 
   public int getPercent() {
-    return percent.get();
+    return angerPercent.get();
   }
 
   public int getRangeCalmingHorizontal() {
-    return rangeCalmingHorizontal.get();
+    return calmingHorizontal.get();
   }
 
   public int getRangeCalmingVertical() {
-    return rangeCalmingVertical.get();
+    return calmingVertical.get();
   }
 
   public int getRangeAngerHorizontal() {
-    return rangeAngerHorizontal.get();
+    return angerHorizontal.get();
   }
 
   public int getRangeAngerVertical() {
-    return rangeAngerVertical.get();
+    return angerVertical.get();
   }
 
   public boolean isCalmingOnDeathEnabled() {

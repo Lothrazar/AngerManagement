@@ -44,6 +44,5 @@ public class ModAngerManagement {
     if (config.isLogEverything()) {
       LOGGER.info(string);
     }
-    LOGGER.info(string + " BONUS delete me");
   }
 }

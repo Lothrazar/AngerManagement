@@ -54,17 +54,13 @@ public class EnrageHandler {
   @SubscribeEvent
   public void onBreak(BlockEvent.BreakEvent event) {
     ModAngerManagement.log("BreakEvent ");
-  }
-
-  @SubscribeEvent
-  public void onHarvestDropsEvent(HarvestDropsEvent event) {
-    ModAngerManagement.log("HarvestDropsEvent");
     if (event.getState() == null) {
       return;
     }
     BlockState blockstate = event.getState();
     BlockPos pos = event.getPos();
     IWorld world = event.getWorld();
+    PlayerEntity harvester = event.getPlayer();
     ResourceLocation blockId = blockstate.getBlock().getRegistryName();
     boolean matched = UtilString.isInList(config.getBlockIdsToTrigger(), blockstate.getBlock().getRegistryName());
     if (!matched) {
@@ -82,11 +78,16 @@ public class EnrageHandler {
       List<ZombiePigmanEntity> found = world.getEntitiesWithinAABB(ZombiePigmanEntity.class, region);
       for (ZombiePigmanEntity pz : found) {
         if (AngerUtils.isAngry(pz) == false) {
-          AngerUtils.makeAngry(event.getHarvester(), pz);
+          AngerUtils.makeAngry(harvester, pz);
           break;// one will alert others, its enough
         }
       }
     }
+  }
+
+  @SubscribeEvent
+  public void onHarvestDropsEvent(HarvestDropsEvent event) {
+    ModAngerManagement.log("HarvestDropsEvent");
   }
 
   @SubscribeEvent
