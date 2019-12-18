@@ -32,12 +32,12 @@ public class ModAngerManagement {
     String source = (event.getSource() == null) ? "" : event.getSource().getName() + " ";
     String msg = MODID + " Invalid fingerprint detected! The file " + source
         + "may have been tampered with. This version will NOT be supported by the author!";
-    if (LOGGER == null) {
-      System.out.println(msg);
-    }
-    else {
-      LOGGER.error(msg);
-    }
+    //    if (LOGGER == null) {
+    //      System.out.println(msg);
+    //    }
+    //    else {
+    //      LOGGER.error(msg);
+    //    }
   }
 
   public static void log(String string) {
