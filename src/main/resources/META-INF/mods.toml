@@ -32,7 +32,7 @@ description='''
 Pigmen become peaceful when they notice a player death.  Iron Golems never attack players. 
 '''
 # A dependency - use the . to indicate dependency for a specific modid. Dependencies are optional.
-[[dependencies.examplemod]] #optional
+[[dependencies.angermanagement]] #optional
     # the modid of the dependency
     modId="forge" #mandatory
     # Does this dependency have to exist - if not, ordering below must be specified
@@ -44,7 +44,7 @@ Pigmen become peaceful when they notice a player death.  Iron Golems never attac
     # Side this dependency is applied on - BOTH, CLIENT or SERVER
     side="BOTH"
 # Here's another dependency
-[[dependencies.examplemod]]
+[[dependencies.angermanagement]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.15.2]"
