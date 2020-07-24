@@ -13,9 +13,9 @@ import net.minecraftforge.fml.loading.FMLPaths;
 @Mod(ModAngerManagement.MODID)
 public class ModAngerManagement {
 
-  String certificateFingerprint = "@FINGERPRINT@";
+  //  String certificateFingerprint = "@FINGERPRINT@";
   public static final String MODID = "angermanagement";
-  public static final int NETHER = -1;
+  //  public static final int NETHER = -1;
   public static final Logger LOGGER = LogManager.getLogger();
   public static ConfigManager config;
 
